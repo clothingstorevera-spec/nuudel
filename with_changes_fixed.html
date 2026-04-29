@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>НҮҮДЭЛ E-BIKES</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050505;--s1:#0a0a0a;--s2:#111;--s3:#1a1a1a;
+  --border:rgba(255,255,255,0.07);--dim:rgba(255,255,255,0.1);
+  --pink:#39ff14;--pink2:#7fff00;
+  --green:#39ff14;--green2:#7fff00;
+  --white:#fff;--muted:rgba(255,255,255,.45);
+  --r:8px;--rx:14px;--max:1380px;--pad:clamp(1rem,4vw,3rem);
+  --fh:'Oswald',sans-serif;--fb:'Noto Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:var(--fb);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;font-family:inherit;color:inherit}
+img{display:block;max-width:100%}
+nav{position:fixed;top:0;left:0;right:0;z-index:800;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 var(--pad);background:rgba(5,5,5,.88);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);transition:background .3s}
+.nav-logo{font-family:var(--fh);font-weight:700;font-size:1.15rem;letter-spacing:.04em;display:flex;align-items:center;gap:.6rem}
+.nav-logo-text{background:linear-gradient(110deg,#fff,var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-logo-icon{width:28px;height:28px;flex-shrink:0}
+.nav-links{display:flex;align-items:center;gap:.15rem}
+.nav-links a{font-family:var(--fh);font-size:.8rem;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:.38rem .65rem;border-radius:6px;transition:color .2s,background .2s;cursor:pointer;white-space:nowrap}
+.nav-links a:hover{color:var(--white);background:var(--dim)}
+.nav-cta{background:var(--green)!important;color:#000!important;font-weight:700!important;padding:.38rem 1rem!important;border-radius:100px!important;margin-left:.5rem}
+.nav-cta:hover{background:var(--green2)!important;color:#000!important}
+.nav-ham{display:none;flex-direction:column;gap:5px;width:36px;height:36px;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:6px}
+.nav-ham span{display:block;width:16px;height:1.5px;background:#fff}
+@media(max-width:900px){
+  .nav-ham{display:flex}
+  .nav-links{display:none;position:fixed;top:58px;left:0;right:0;flex-direction:column;align-items:flex-start;background:rgba(5,5,5,.98);backdrop-filter:blur(24px);padding:1rem;gap:.4rem;border-bottom:1px solid var(--border)}
+  .nav-links.open{display:flex}
+  .nav-links a{width:100%;padding:.6rem .8rem;font-size:.9rem}
+}
+/* ── HERO ── */
+#hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;background:#000;padding:80px var(--pad) 0}
+@media(max-width:900px){#hero{padding-top:70px;min-height:auto}}
+/* full-bleed background image */
+.hero-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center right;z-index:0;opacity:1}
+/* dark gradient overlay so text stays readable */
+.hero-bg-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(to right,rgba(0,0,0,.92) 0%,rgba(0,0,0,.75) 45%,rgba(0,0,0,.25) 75%,rgba(0,0,0,.1) 100%)}
+@media(max-width:900px){
+  .hero-bg-overlay{background:linear-gradient(to bottom,rgba(0,0,0,.55) 0%,rgba(0,0,0,.82) 55%,rgba(0,0,0,.97) 100%)}
+  .hero-bg-img{object-position:65% center}
+}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;align-items:center;max-width:var(--max);margin:0 auto;gap:2rem;flex:1;padding-bottom:0;position:relative;z-index:2}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr;text-align:center;padding-bottom:1.5rem;gap:0}}
+.hero-left{position:relative;z-index:2;padding:2rem 0}
+@media(max-width:900px){.hero-left{padding:1.25rem 0 0}}
+.hero-right{display:none} /* hidden — background handles the image */
+.hero-eyebrow{display:flex;align-items:center;gap:.7rem;font-family:var(--fh);font-size:.65rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--green);margin-bottom:1.2rem}
+@media(max-width:900px){.hero-eyebrow{justify-content:center;font-size:.58rem;letter-spacing:.15em}}
+.hero-eyebrow-line{width:32px;height:2px;background:var(--green);flex-shrink:0}
+h1.hero-title{font-family:var(--fh);font-weight:700;text-transform:uppercase;font-size:clamp(2.6rem,7.5vw,7rem);line-height:1.05
+  ;letter-spacing:.01em;margin-bottom:1.4rem}
+@media(max-width:900px){h1.hero-title{font-size:clamp(2.8rem,13vw,5rem);margin-bottom:1rem}}
+@media(max-width:480px){h1.hero-title{font-size:clamp(2.4rem,14vw,4rem)}}
+h1.hero-title .white-line{color:#fff;display:block}
+h1.hero-title .green-line{display:block;color:var(--green);text-shadow:0 0 40px rgba(57,255,20,.35)}
+.hero-sub{font-size:clamp(.88rem,1.5vw,1.05rem);color:var(--muted);max-width:420px;margin-bottom:2rem;font-weight:300;line-height:1.7}
+@media(max-width:900px){.hero-sub{margin-left:auto;margin-right:auto;font-size:.9rem;margin-bottom:1.4rem;max-width:360px}}
+.hero-actions{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+@media(max-width:900px){.hero-actions{justify-content:center;gap:1rem}}
+.btn-p{font-family:var(--fh);font-weight:700;font-size:.86rem;letter-spacing:.08em;text-transform:uppercase;padding:.75rem 1.9rem;border-radius:8px;background:var(--green);color:#000;display:inline-flex;align-items:center;gap:.5rem;transition:.2s}
+.btn-p:hover{background:var(--green2);transform:translateY(-2px);box-shadow:0 12px 40px rgba(57,255,20,.3)}
+@media(max-width:480px){.btn-p{font-size:.8rem;padding:.7rem 1.5rem}}
+.btn-p svg{width:14px;height:14px;fill:#000;flex-shrink:0}
+.hero-tagline{font-family:var(--fh);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.3);line-height:1.7;border-left:2px solid rgba(57,255,20,.3);padding-left:.75rem}
+@media(max-width:900px){.hero-tagline{border-left:none;border-top:2px solid rgba(57,255,20,.3);padding-left:0;padding-top:.5rem;font-size:.6rem}}
+
+/* ── HERO BOTTOM BAR ── */
+.hero-bar{width:100%;border-top:1px solid rgba(255,255,255,.08);background:#000;margin-top:0}
+.hero-bar-inner{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+@media(max-width:640px){.hero-bar-inner{grid-template-columns:repeat(2,1fr)}}
+.hb-item{padding:1.2rem var(--pad);display:flex;flex-direction:column;align-items:flex-start;gap:.45rem;border-right:1px solid rgba(255,255,255,.06)}
+@media(max-width:640px){.hb-item{padding:1rem .9rem}}
+.hb-item:last-child{border-right:none}
+@media(max-width:640px){.hb-item:nth-child(2){border-right:none}}
+.hb-icon{width:28px;height:28px;stroke:var(--green);stroke-width:1.8;fill:none;flex-shrink:0}
+.hb-label{font-family:var(--fh);font-weight:700;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:#fff}
+.hb-desc{font-size:.7rem;color:var(--muted);line-height:1.5}
+/* orbs */
+.orb{position:absolute;border-radius:50%;filter:blur(110px);opacity:.18;pointer-events:none}
+.orb1{width:500px;height:500px;right:-100px;bottom:-100px;background:radial-gradient(#39ff14,transparent 70%);animation:o1 14s ease-in-out infinite alternate}
+.orb2{width:350px;height:350px;left:-80px;top:30%;background:radial-gradient(#003300,transparent 70%);animation:o2 18s ease-in-out infinite alternate}
+@keyframes o1{to{transform:translate(-30px,30px) scale(1.1)}}
+@keyframes o2{to{transform:translate(20px,-30px) scale(1.15)}}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--s1)}
+@media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{padding:1.75rem 1.25rem;text-align:center;border-right:1px solid var(--border)}
+.stat:last-child{border-right:none}
+.stat-num{font-family:var(--fh);font-weight:700;font-size:2rem;background:linear-gradient(135deg,#fff,var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-lbl{font-size:.72rem;color:var(--muted);margin-top:.25rem;font-weight:400}
+#kits{padding:clamp(3rem,5vw,5rem) var(--pad)}
+.sec-wrap{max-width:var(--max);margin:0 auto}
+.sec-tag{font-family:var(--fh);font-size:.66rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--green);display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem}
+.sec-tag::before{content:'';width:20px;height:1px;background:var(--green)}
+h2.sec-h{font-family:var(--fh);font-weight:700;text-transform:uppercase;font-size:clamp(2rem,5vw,3.8rem);line-height:.95;background:linear-gradient(135deg,#fff,rgba(255,255,255,.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sec-note{font-size:.88rem;color:var(--muted);margin-top:.55rem;font-weight:300;line-height:1.6}
+.kit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;max-width:var(--max);margin:2.5rem auto 0}
+@media(max-width:1050px){.kit-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){.kit-grid{grid-template-columns:1fr}}
+.kit-card{position:relative;overflow:hidden;cursor:pointer;background:var(--s1);aspect-ratio:4/5;display:flex;flex-direction:column;justify-content:flex-end}
+.kit-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .65s cubic-bezier(.22,1,.36,1),filter .4s;filter:brightness(.8)}
+.kit-card:hover .kit-bg{transform:scale(1.06);filter:brightness(.6)}
+.kit-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:3rem;font-weight:700;color:rgba(255,255,255,.05);background:linear-gradient(145deg,var(--s2),var(--bg))}
+.kit-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.4) 45%,transparent 75%);transition:.4s}
+.kit-card:hover .kit-grad{background:linear-gradient(to top,rgba(0,0,0,.96) 0%,rgba(0,0,0,.7) 55%,rgba(0,0,0,.15) 100%)}
+.kit-body{position:relative;z-index:2;padding:1.35rem 1.4rem 1.4rem}
+.kit-badge{display:inline-flex;align-items:center;gap:.35rem;margin-bottom:.65rem;font-family:var(--fh);font-size:.62rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:.26rem .72rem;color:rgba(255,255,255,.8)}
+.kit-name{font-family:var(--fh);font-weight:700;text-transform:uppercase;font-size:clamp(2rem,4vw,2.8rem);line-height:.92;margin-bottom:.35rem;color:#fff}
+.kit-name span{color:var(--acc,#fff)}
+.kit-teaser{font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.5;max-height:0;overflow:hidden;transition:max-height .35s,opacity .3s;opacity:0}
+.kit-card:hover .kit-teaser{max-height:60px;opacity:1}
+.kit-price{font-family:var(--fh);font-weight:700;font-size:.98rem;color:#fff;margin-top:.45rem}
+.kit-price small{font-size:.7rem;color:var(--muted);font-weight:400;margin-left:.3rem}
+.kit-arrow{position:absolute;top:1.2rem;right:1.2rem;z-index:3;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;transition:.3s;transform:scale(0);opacity:0;backdrop-filter:blur(8px)}
+.kit-card:hover .kit-arrow{transform:scale(1);opacity:1}
+.kit-arrow svg{width:13px;height:13px;stroke:#fff;stroke-width:2.5}
+/* MODAL */
+.m-bg{position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.88);backdrop-filter:blur(24px);display:none;opacity:0;transition:opacity .3s;align-items:center;justify-content:center}
+.m-bg.open{display:flex;opacity:1}
+.m-box{position:relative;width:95vw;max-width:1100px;height:88vh;max-height:800px;background:var(--s1);border:1px solid var(--border);border-radius:var(--rx);overflow:hidden;display:grid;grid-template-columns:1fr 1fr}
+@media(max-width:720px){.m-box{grid-template-columns:1fr;height:auto;max-height:94vh;overflow-y:auto}}
+.m-close{position:absolute;top:.85rem;right:.85rem;z-index:20;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s}
+.m-close:hover{background:rgba(255,255,255,.18)}
+.m-close svg{width:12px;height:12px;stroke:#fff;stroke-width:2.5}
+.m-left{display:flex;flex-direction:column;background:#000;border-right:1px solid var(--border)}
+.m-gal{position:relative;flex:1;min-height:240px;overflow:hidden}
+.m-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;padding:8px;transition:opacity .22s}
+.m-img.fade{opacity:0}
+.g-prev,.g-next{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s}
+.g-prev:hover,.g-next:hover{background:rgba(255,255,255,.22)}
+.g-prev{left:.65rem}.g-next{right:.65rem}
+.g-prev svg,.g-next svg{width:13px;height:13px;stroke:#fff;stroke-width:2.5}
+.g-dots{position:absolute;bottom:.75rem;left:50%;transform:translateX(-50%);display:flex;gap:.4rem}
+.g-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:.2s}
+.g-dot.on{background:#fff;width:16px;border-radius:3px}
+.m-info{padding:1.1rem 1.4rem;border-top:1px solid var(--border);background:var(--s2)}
+.m-watts{font-family:var(--fh);font-size:.62rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.3rem}
+.m-name{font-family:var(--fh);font-weight:700;text-transform:uppercase;font-size:clamp(1.5rem,3vw,2.2rem);line-height:.95;margin-bottom:.22rem}
+.m-speed{font-size:.76rem;color:var(--muted);margin-bottom:.55rem;line-height:1.5}
+.m-price-line{font-family:var(--fh);font-weight:700;font-size:1.2rem;margin-bottom:.65rem}
+.m-price-line small{font-size:.76rem;color:var(--muted);font-weight:400;margin-left:.25rem}
+.m-includes{display:flex;flex-wrap:wrap;gap:.35rem}
+.inc-tag{font-size:.65rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);line-height:1.3;font-family:var(--fb)}
+.m-right{display:flex;flex-direction:column;overflow:hidden}
+.m-rhead{padding:1.1rem 1.4rem .9rem;border-bottom:1px solid var(--border);flex-shrink:0}
+.m-rhead h3{font-family:var(--fh);font-weight:700;text-transform:uppercase;font-size:1.15rem}
+.m-rhead p{font-size:.75rem;color:var(--muted);margin-top:.25rem;line-height:1.4}
+.bat-list{flex:1;overflow-y:auto;padding:.75rem}
+.bat-list::-webkit-scrollbar{width:3px}
+.bat-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.bat-card{display:grid;grid-template-columns:50px 1fr auto;gap:.8rem;align-items:center;padding:.85rem .95rem;border-radius:var(--r);border:1px solid var(--border);cursor:pointer;transition:.22s;margin-bottom:.5rem;background:rgba(255,255,255,.02)}
+.bat-card:hover{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.04)}
+.bat-card.sel{border-color:var(--acc,var(--green));background:var(--acc-gl,rgba(57,255,20,.07))}
+.bat-img{width:50px;height:50px;border-radius:6px;background:var(--s3);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.bat-img img{width:100%;height:100%;object-fit:contain;padding:4px}
+.bat-title{font-family:var(--fh);font-weight:700;font-size:.95rem;line-height:1.1}
+.bat-sub{font-size:.7rem;color:var(--muted);margin-top:.15rem;line-height:1.35}
+.bat-price{font-family:var(--fh);font-weight:700;font-size:.88rem;white-space:nowrap;margin-bottom:.28rem;text-align:right}
+.bat-check{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;margin-left:auto;transition:.2s}
+.bat-card.sel .bat-check{background:var(--acc,var(--green));border-color:var(--acc,var(--green))}
+.bat-check svg{display:none;width:8px;height:8px;stroke:#fff;stroke-width:3}
+.bat-card.sel .bat-check svg{display:block}
+.m-total{flex-shrink:0;border-top:1px solid var(--border);padding:.95rem 1.4rem;background:var(--s2)}
+.tot-row{display:flex;justify-content:space-between;align-items:center;padding:.28rem 0;font-size:.8rem;color:var(--muted)}
+.tot-row span:last-child{font-family:var(--fh);font-weight:600;color:#fff;font-size:.85rem}
+.tot-divider{border-top:1px solid var(--border);margin:.45rem 0}
+.tot-final{display:flex;justify-content:space-between;align-items:center}
+.tot-lbl{font-family:var(--fh);font-weight:600;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tot-val{font-family:var(--fh);font-weight:700;font-size:1.55rem}
+.tot-cta{display:block;margin-top:.75rem;text-align:center;font-family:var(--fh);font-weight:600;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;padding:.62rem 1.5rem;border-radius:100px;background:var(--green);color:#000;transition:.2s}
+.tot-cta:hover{background:var(--green2)}
+#contact{padding:clamp(4rem,7vw,7rem) var(--pad);background:var(--s1)}
+.contact-wrap{max-width:660px;margin:0 auto;text-align:center}
+.contact-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;margin:2.25rem 0 1.75rem}
+@media(max-width:540px){.contact-cards{grid-template-columns:1fr}}
+.c-card{padding:1.3rem;border:1px solid var(--border);border-radius:var(--rx);background:var(--s2)}
+.c-lbl{font-size:.62rem;font-family:var(--fh);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:.45rem}
+.c-val{font-family:var(--fh);font-weight:700;font-size:1rem}
+.ig-btn{display:inline-flex;align-items:center;gap:.7rem;font-family:var(--fh);font-weight:600;font-size:.9rem;letter-spacing:.05em;text-transform:uppercase;padding:.85rem 2.1rem;border-radius:100px;background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:#fff;transition:.2s}
+.ig-btn:hover{transform:translateY(-2px);box-shadow:0 12px 38px rgba(253,29,29,.4)}
+.ig-btn svg{width:19px;height:19px;stroke:#fff;stroke-width:1.8;flex-shrink:0}
+footer{padding:1.5rem var(--pad);border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.65rem}
+.f-logo{font-family:var(--fh);font-weight:700;font-size:1rem;letter-spacing:.06em}
+.f-copy{font-size:.68rem;color:var(--muted)}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s}
+.reveal.vis{opacity:1;transform:none}
+.stagger.vis>*{opacity:1!important;transform:none!important}
+.stagger>*{opacity:0;transform:translateY(12px);transition:opacity .55s,transform .55s}
+.stagger>*:nth-child(1){transition-delay:.04s}
+.stagger>*:nth-child(2){transition-delay:.09s}
+.stagger>*:nth-child(3){transition-delay:.14s}
+.stagger>*:nth-child(4){transition-delay:.19s}
+.stagger>*:nth-child(5){transition-delay:.24s}
+.stagger>*:nth-child(6){transition-delay:.29s}
+hr{border:none;border-top:1px solid var(--border)}
+
+/* ── IMAGE LIGHTBOX ── */
+#imgLightbox{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.92);backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;opacity:0;transition:opacity .3s}
+#imgLightbox.open{display:flex;opacity:1}
+#imgLightbox img{max-width:92vw;max-height:88vh;object-fit:contain;border-radius:8px;box-shadow:0 20px 80px rgba(0,0,0,.8);transform:scale(.94);transition:transform .3s cubic-bezier(.22,1,.36,1)}
+#imgLightbox.open img{transform:scale(1)}
+#imgLbClose{position:absolute;top:1rem;right:1rem;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s;color:#fff;font-size:1.2rem;font-weight:300}
+#imgLbClose:hover{background:rgba(255,255,255,.25)}
+.kit-bg{cursor:zoom-in}
+</style>
+</head>
+<body>
+
+<nav id="mainnav">
+  <div class="nav-logo">
+    <svg class="nav-logo-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="14" cy="14" r="12" stroke="#39ff14" stroke-width="1.5"/>
+      <circle cx="14" cy="14" r="3.5" stroke="#39ff14" stroke-width="1.5"/>
+      <line x1="14" y1="2" x2="14" y2="10.5" stroke="#39ff14" stroke-width="1.2"/>
+      <line x1="14" y1="17.5" x2="14" y2="26" stroke="#39ff14" stroke-width="1.2"/>
+      <line x1="2" y1="14" x2="10.5" y2="14" stroke="#39ff14" stroke-width="1.2"/>
+      <line x1="17.5" y1="14" x2="26" y2="14" stroke="#39ff14" stroke-width="1.2"/>
+      <line x1="5.5" y1="5.5" x2="11.5" y2="11.5" stroke="#39ff14" stroke-width="1.2"/>
+      <line x1="16.5" y1="16.5" x2="22.5" y2="22.5" stroke="#39ff14" stroke-width="1.2"/>
+      <line x1="22.5" y1="5.5" x2="16.5" y2="11.5" stroke="#39ff14" stroke-width="1.2"/>
+      <line x1="11.5" y1="16.5" x2="5.5" y2="22.5" stroke="#39ff14" stroke-width="1.2"/>
+    </svg>
+    <span class="nav-logo-text">НҮҮДЭЛ E-BIKES</span>
+  </div>
+  <div class="nav-links" id="navlinks">
+    <a onclick="scrollSec('hero');closeNav()">Нүүр</a>
+    <a onclick="openKit('250');closeNav()">250W</a>
+    <a onclick="openKit('1000');closeNav()">1000W</a>
+    <a onclick="openKit('1500');closeNav()">1500W</a>
+    <a onclick="openKit('2000');closeNav()">2000W</a>
+    <a onclick="openKit('3000');closeNav()">3000W</a>
+    <a onclick="openKit('5000');closeNav()">5000W</a>
+    <a href="https://www.instagram.com/nuudel_ebikes" target="_blank" class="nav-cta">Холбоо Барих</a>
+  </div>
+  <button class="nav-ham" id="ham" onclick="toggleNav()"><span></span><span></span><span></span></button>
+</nav>
+
+<section id="hero">
+  <!-- BACKGROUND IMAGE — swap src to your image filename in the same folder -->
+  <img id="heroBgImg" class="hero-bg-img" src="https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0000.jpg" alt="">
+  <div class="hero-bg-overlay"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="hero-grid">
+    <!-- LEFT: Text content -->
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-line"></span>
+        ӨНДӨР ХУРДНЫ ЦАХИЛГААН ДУГУЙН ИЖ БҮРДЭЛ
+      </div>
+      <h1 class="hero-title">
+        <span class="white-line">Цахилгаан Дугуйн</span>
+        <span class="green-line">Иж Бүрдэл</span>
+      </h1>
+      <p class="hero-sub">Өөрийн дугуйгаа цахилгаан болгох хамгийн хялбар арга.</p>
+      <div class="hero-actions">
+        <a class="btn-p" onclick="scrollSec('kits')">
+          <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 1L10 7H4L7 1Z" fill="#000"/><path d="M7 13V7" stroke="#000" stroke-width="1.5" stroke-linecap="round"/></svg>
+          ИЖ БҮРДЭЛ ХАРАХ
+        </a>
+         <div class="hero-tagline">Хурд,Хүчний <br>Төгс<br>Хослол</div>
+      </div>
+    </div>
+    <div class="hero-right"></div>
+  </div>
+        
+      </div>
+    </div>
+    <div class="hero-right"></div>
+  </div>
+  <!-- BOTTOM FEATURE BAR -->
+  <div class="hero-bar">
+    <div class="hero-bar-inner">
+      <div class="hb-item">
+        <svg class="hb-icon" viewBox="0 0 24 24"><path d="M13 2L4.5 13.5H12L11 22L19.5 10.5H12L13 2Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="hb-label">ХҮЧИРХЭГ</div>
+        <div class="hb-desc">Бүх жолоочид зориулсан өндөр гаралттай иж бүрдэл.</div>
+      </div>
+      <div class="hb-item">
+        <svg class="hb-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 5.5l.5.5M18.5 5.5l-.5.5" stroke-linecap="round"/></svg>
+        <div class="hb-label">ӨНДӨР ХУРД</div>
+        <div class="hb-desc">Дээд хурд 65+ км/ц хүртэл.</div>
+      </div>
+      <div class="hb-item">
+        <svg class="hb-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+        <div class="hb-label">ӨНДӨР ТАТАХ ХҮЧ</div>
+        <div class="hb-desc">Бодит гүйцэтгэлд зориулсан дээд татах хүч.</div>
+      </div>
+      <div class="hb-item">
+        <svg class="hb-icon" viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 5.25 3.75 10.15 9 11.35C17.25 23.15 21 18.25 21 13V7L12 2Z"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="hb-label">УДААН ҮЙЛЧИЛНЭ</div>
+        <div class="hb-desc">Чанартай эд ангиуд. Маш сайн туршигдсан.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats stagger">
+  <div class="stat"><div class="stat-num">6</div><div class="stat-lbl">Иж Бүрдэл Сонголт</div></div>
+  <div class="stat"><div class="stat-num">100</div><div class="stat-lbl">км/ц Дээд Хурд</div></div>
+  <div class="stat"><div class="stat-num">8</div><div class="stat-lbl">Батарей Сонголт</div></div>
+  <div class="stat"><div class="stat-num">IP66</div><div class="stat-lbl">Усны Хамгаалалт</div></div>
+</div>
+
+<div id="kits" style="padding:clamp(3rem,5vw,5rem) var(--pad)">
+  <div class="sec-wrap">
+    <div class="reveal" style="margin-bottom:2.5rem">
+      <div class="sec-tag">Бүтээгдэхүүн</div>
+      <h2 class="sec-h">ИЖ БҮРДЭЛ<br>СОНГОХ</h2>
+      <p class="sec-note">Хүссэн Kit дээрээ дарж дэлгэрэнгүй мэдээлэл болон батарейн үнийг харна уу.</p>
+    </div>
+  </div>
+  <div class="kit-grid stagger">
+
+    <div class="kit-card" style="--acc:#39ff14" onclick="openKit('250')">
+      <img class="kit-bg" src="https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0001.jpg" alt="250W" onerror="this.style.display='none'">
+      <div class="kit-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="kit-body">
+        <div class="kit-badge">ДЭЭД ХУРД <span style="color:#39ff14;font-weight:700">25 КМ/Ц</span></div>
+        <div class="kit-name"><span>250</span>W KIT</div>
+        <div class="kit-teaser">Эхлэгчдэд хамгийн тохиромжтой. Хотын замд тохиромжтой сонголт.</div>
+        <div class="kit-price">₮510,000 <small>иж бүрдэл</small></div>
+      </div>
+    </div>
+
+    <div class="kit-card" style="--acc:#ffd700" onclick="openKit('1000')">
+      <img class="kit-bg" src="https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0002.jpg" alt="1000W" onerror="this.style.display='none'">
+      <div class="kit-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="kit-body">
+        <div class="kit-badge">ДЭЭД ХУРД <span style="color:#ffd700;font-weight:700">50 КМ/Ц</span></div>
+        <div class="kit-name"><span>1000</span>W KIT</div>
+        <div class="kit-teaser">Хотын болон хэсгийн замд. Rear wheel drive. 26A FOC контроллер.</div>
+        <div class="kit-price">₮748,000 <small>иж бүрдэл</small></div>
+      </div>
+    </div>
+
+    <div class="kit-card" style="--acc:#ff6b00" onclick="openKit('1500')">
+      <img class="kit-bg" src="https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0003.jpg" alt="1500W" onerror="this.style.display='none'">
+      <div class="kit-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="kit-body">
+        <div class="kit-badge">ДЭЭД ХУРД <span style="color:#ff6b00;font-weight:700">60 КМ/Ц</span></div>
+        <div class="kit-name"><span>1500</span>W KIT</div>
+        <div class="kit-teaser">Ширүүн гудамжинд. 35/40A FOC. Мушгаа болон эрхий хуруу хааз.</div>
+        <div class="kit-price">₮952,000 <small>иж бүрдэл</small></div>
+      </div>
+    </div>
+
+    <div class="kit-card" style="--acc:#ff2020" onclick="openKit('2000')">
+      <img class="kit-bg" src="https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0004.jpg" alt="2000W" onerror="this.style.display='none'">
+      <div class="kit-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="kit-body">
+        <div class="kit-badge">ДЭЭД ХУРД <span style="color:#ff2020;font-weight:700">65 КМ/Ц</span></div>
+        <div class="kit-name"><span>2000</span>W KIT</div>
+        <div class="kit-teaser">Fat tire зориулсан. 45A FOC. 48V–52V батарей тохирно.</div>
+        <div class="kit-price">₮1,190,000 <small>иж бүрдэл</small></div>
+      </div>
+    </div>
+
+    <div class="kit-card" style="--acc:#5555ff" onclick="openKit('3000')">
+      <img class="kit-bg" src="https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0005.jpg" alt="3000W" onerror="this.style.display='none'">
+      <div class="kit-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="kit-body">
+        <div class="kit-badge">ДЭЭД ХУРД <span style="color:#5555ff;font-weight:700">80 КМ/Ц</span></div>
+        <div class="kit-name"><span>3000</span>W KIT</div>
+        <div class="kit-teaser">Мэргэжлийн хүн. 60A FOC. 72V батарей.</div>
+        <div class="kit-price">₮1,632,000 <small>иж бүрдэл</small></div>
+      </div>
+    </div>
+
+    <div class="kit-card" style="--acc:#ff00cc" onclick="openKit('5000')">
+      <img class="kit-bg" src="https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0006.jpg" alt="5000W" onerror="this.style.display='none'">
+      <div class="kit-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="kit-body">
+        <div class="kit-badge">ДЭЭД ХУРД <span style="color:#ff00cc;font-weight:700">100 КМ/Ц</span></div>
+        <div class="kit-name"><span>5000</span>W KIT</div>
+        <div class="kit-teaser">100A FOC ESC. Мотоцикл хурдтай. Хамгийн хүчирхэг.</div>
+        <div class="kit-price">₮2,210,000 <small>иж бүрдэл</small></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BATTERY SECTION -->
+<div id="battery" style="padding:clamp(3rem,5vw,5rem) var(--pad);background:var(--s1)">
+  <div class="sec-wrap">
+    <div class="reveal" style="margin-bottom:2.5rem">
+      <div class="sec-tag">Батарей</div>
+      <h2 class="sec-h">БАТАРЕЙ<br>СОНГОХ</h2>
+      <p class="sec-note">Иж бүрдэлтэйгээ тохирох батарейгаа сонгоорой. Картан дээр дарж зургийг харна уу.</p>
+    </div>
+  </div>
+  <!-- Battery gallery grid -->
+  <div style="max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:1px" class="stagger" id="batGalleryGrid">
+    <div class="kit-card" style="--acc:#39ff14;aspect-ratio:1/1;cursor:pointer" onclick="openBatGallery(0)">
+      <img class="kit-bg" src="https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0007.jpg" alt="Батарей" onerror="this.style.display='none'">
+      <div class="kit-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="kit-body"><div class="kit-name" style="font-size:clamp(1rem,2vw,1.4rem)">БАТАРЕЙ</div></div>
+    </div>
+    <div class="kit-card" style="--acc:#39ff14;aspect-ratio:1/1;cursor:pointer" onclick="openBatGallery(1)">
+      <img class="kit-bg" src="https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0008.jpg" alt="64" onerror="this.style.display='none'">
+      <div class="kit-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+    <div class="kit-card" style="--acc:#39ff14;aspect-ratio:1/1;cursor:pointer" onclick="openBatGallery(2)">
+      <img class="kit-bg" src="https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0009.jpg" alt="65" onerror="this.style.display='none'">
+      <div class="kit-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+    <div class="kit-card" style="--acc:#39ff14;aspect-ratio:1/1;cursor:pointer" onclick="openBatGallery(3)">
+      <img class="kit-bg" src="https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0010.jpg" alt="66" onerror="this.style.display='none'">
+      <div class="kit-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+    <div class="kit-card" style="--acc:#39ff14;aspect-ratio:1/1;cursor:pointer" onclick="openBatGallery(4)">
+      <img class="kit-bg" src="https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0011.jpg" alt="67" onerror="this.style.display='none'">
+      <div class="kit-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+    <div class="kit-card" style="--acc:#39ff14;aspect-ratio:1/1;cursor:pointer" onclick="openBatGallery(5)">
+      <img class="kit-bg" src="https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0012.jpg" alt="68" onerror="this.style.display='none'">
+      <div class="kit-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+    <div class="kit-card" style="--acc:#39ff14;aspect-ratio:1/1;cursor:pointer" onclick="openBatGallery(6)">
+      <img class="kit-bg" src="https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0013.jpg" alt="69" onerror="this.style.display='none'">
+      <div class="kit-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+    <div class="kit-card" style="--acc:#39ff14;aspect-ratio:1/1;cursor:pointer" onclick="openBatGallery(7)">
+      <img class="kit-bg" src="https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0014.jpg" alt="70" onerror="this.style.display='none'">
+      <div class="kit-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+    <div class="kit-card" style="--acc:#39ff14;aspect-ratio:1/1;cursor:pointer" onclick="openBatGallery(8)">
+      <img class="kit-bg" src="https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0015.jpg" alt="71" onerror="this.style.display='none'">
+      <div class="kit-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+    <div class="kit-card" style="--acc:#39ff14;aspect-ratio:1/1;cursor:pointer" onclick="openBatGallery(9)">
+      <img class="kit-bg" src="https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0016.jpg" alt="72" onerror="this.style.display='none'">
+      <div class="kit-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+  </div>
+</div>
+
+<!-- BATTERY LIGHTBOX -->
+<div class="m-bg" id="batLightbox" onclick="if(event.target===this)closeBatGallery()" style="display:none">
+  <div style="position:relative;width:90vw;max-width:700px;background:#000;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.1)">
+    <button onclick="closeBatGallery()" style="position:absolute;top:.8rem;right:.8rem;z-index:10;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer">
+      <svg viewBox="0 0 24 24" fill="none" style="width:12px;height:12px;stroke:#fff;stroke-width:2.5"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <img id="batLbImg" src="" style="width:100%;height:auto;display:block;max-height:85vh;object-fit:contain;background:#000">
+    <button onclick="moveBatGallery(-1)" style="position:absolute;top:50%;left:.65rem;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer">
+      <svg viewBox="0 0 24 24" fill="none" style="width:13px;height:13px;stroke:#fff;stroke-width:2.5"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button onclick="moveBatGallery(1)" style="position:absolute;top:50%;right:.65rem;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer">
+      <svg viewBox="0 0 24 24" fill="none" style="width:13px;height:13px;stroke:#fff;stroke-width:2.5"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="m-bg" id="mbg" onclick="bgClose(event)">
+  <div class="m-box" id="mbox">
+    <button class="m-close" onclick="closeModal()">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="m-left">
+      <div class="m-gal" id="mgal">
+        <img class="m-img" id="mimg" src="" alt="">
+        <button class="g-prev" onclick="galMove(-1)"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="g-next" onclick="galMove(1)"><svg viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="g-dots" id="gdots"></div>
+      </div>
+      <div class="m-info">
+        <div class="m-watts" id="mwatts"></div>
+        <div class="m-name" id="mname"></div>
+        <div class="m-speed" id="mspeed"></div>
+        <div class="m-price-line" id="mprice"></div>
+        <div class="m-includes" id="mincludes"></div>
+      </div>
+    </div>
+    <div class="m-right">
+      <div class="m-rhead">
+        <h3>БАТАРЕЙ СОНГОХ</h3>
+        <p>Тохиромжтой батарейгаа сонгоод нийт үнийг тооцоол</p>
+      </div>
+      <div class="bat-list" id="batlist"></div>
+      <div class="m-total">
+        <div class="tot-row"><span>Иж бүрдэл:</span><span id="totKit">—</span></div>
+        <div class="tot-row"><span>Батарей:</span><span id="totBat">Сонгоогүй</span></div>
+        <div class="tot-divider"></div>
+        <div class="tot-final">
+          <span class="tot-lbl">НИЙТ ДҮН</span>
+          <span class="tot-val" id="totVal">—</span>
+        </div>
+        <a href="https://www.instagram.com/nuudel_ebikes" target="_blank" class="tot-cta">Instagram-аар Захиалах →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="contact">
+  <div class="contact-wrap">
+    <div class="reveal">
+      <div class="sec-tag">Холбоо Барих</div>
+      <h2 class="sec-h">ЗАХИАЛГА<br>ӨГӨХ</h2>
+      <p class="sec-note">Асуулт байвал Instagram-аар холбогдоно уу. Хурдан хариулна!</p>
+    </div>
+    <div class="contact-cards reveal">
+      <div class="c-card"><div class="c-lbl">Instagram</div><div class="c-val">@nuudel_ebikes</div></div>
+      <div class="c-card"><div class="c-lbl">Байршил</div><div class="c-val">Улаанбаатар</div></div>
+      <div class="c-card"><div class="c-lbl">Хүргэлт</div><div class="c-val">УБ хотод</div></div>
+    </div>
+    <div class="reveal">
+      <a href="https://www.instagram.com/nuudel_ebikes" target="_blank" class="ig-btn">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg>
+        @nuudel_ebikes дээр Захиалга Өгөх
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-logo">НҮҮДЭЛ E-BIKES</div>
+  <div class="f-copy">250W · 1000W · 1500W · 2000W · 3000W · 5000W</div>
+  <div class="f-copy">© 2026 Нүүдэл E-Bikes · Улаанбаатар, Монгол</div>
+</footer>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────
+// Edit prices freely — just change the numbers
+const KITS = {
+  '250': {
+    watts:'250W', speed:'25 км/ц · 20"–29"', color:'#39ff14', colorGl:'rgba(57,255,20,.08)',
+    price: 510000, // ← иж бүрдэлийн үнэ
+    includes:[
+      '250W Мотор','15A FOC ESC контроллер','SW-G518 дэлгэц',
+      'PAS мэдрэгч','Эрхий хуруу хааз','Torque Arm',
+      'Цахилгаан тоормос','Контроллерын уут','Батерейны уут','20"–29" обод'
+    ],
+    batteries:['36v20'],
+    images:['https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0017.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0018.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0019.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0020.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0021.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0022.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0023.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0024.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0025.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0026.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0027.jpg']
+  },
+  '1000': {
+    watts:'1000W', speed:'45–50 км/ц · 20"–29"', color:'#ffd700', colorGl:'rgba(255,215,0,.08)',
+    price: 748000, // ← иж бүрдэлийн үнэ
+    includes:[
+      '1000W Мотор','26A FOC ESC контроллер','SW900 дэлгэц',
+      'PAS мэдрэгч','Эрхий хуруу хааз','Torque Arm',
+      'Цахилгаан тоормос','Контроллерын уут','Батерейны уут','20"–29" обод'
+    ],
+    batteries:['48v20','48v25'],
+    images:['https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0028.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0029.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0030.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0031.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0032.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0033.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0034.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0035.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0036.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0037.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0038.jpg']
+  },
+  '1500': {
+    watts:'1500W', speed:'50–60 км/ц · 20"–29"', color:'#ff6b00', colorGl:'rgba(255,107,0,.08)',
+    price: 952000, // ← иж бүрдэлийн үнэ
+    includes:[
+      '1500W Мотор','35/40A FOC ESC контроллер','SW900 дэлгэц',
+      'PAS мэдрэгч','Мушгаа + эрхий хуруу хааз','Torque Arm',
+      'Цахилгаан тоормос','Контроллерын уут','Батерейны уут','20"–29" обод'
+    ],
+    batteries:['48v20','48v25','52v20'],
+    images:['https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0039.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0040.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0041.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0042.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0043.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0044.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0045.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0046.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0047.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0048.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0049.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0050.jpg']
+  },
+  '2000': {
+    watts:'2000W', speed:'55–65 км/ц · 20"–29" + Fat tire', color:'#ff2020', colorGl:'rgba(255,32,32,.08)',
+    price: 1190000, // ← иж бүрдэлийн үнэ
+    includes:[
+      '2000W Мотор','45A FOC ESC контроллер','SW900 дэлгэц',
+      'PAS мэдрэгч','Мушгаа + эрхий хуруу хааз','Torque Arm',
+      'Цахилгаан тоормос','Контроллерын уут','Батерейны уут','Fat tire 26x4.0 / 20x4.0'
+    ],
+    batteries:['48v20','48v25','52v20'],
+    images:['https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0051.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0052.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0053.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0054.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0055.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0056.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0057.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0058.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0059.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0060.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0061.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0062.jpg']
+  },
+  '3000': {
+    watts:'3000W', speed:'80+ км/ц · 20"–29"', color:'#5555ff', colorGl:'rgba(85,85,255,.08)',
+    price: 1632000, // ← иж бүрдэлийн үнэ
+    includes:[
+      '3000W Мотор','60A FOC ESC контроллер','SW900 Pro дэлгэц',
+      'PAS мэдрэгч','Мушгаа + эрхий хуруу хааз','Torque Arm',
+      'Цахилгаан тоормос','Контроллерын уут','Батерейны уут','20"–29" обод'
+    ],
+    batteries:['72v20','72v30'],
+    images:['https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0063.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0064.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0065.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0066.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0067.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0068.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0069.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0070.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0071.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0072.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0073.jpg']
+  },
+  '5000': {
+    watts:'5000W', speed:'90–100 км/ц · 20"–29"', color:'#ff00cc', colorGl:'rgba(255,0,204,.08)',
+    price: 2210000, // ← иж бүрдэлийн үнэ
+    includes:[
+      '5000W Мотор','100A FOC ESC контроллер','SW900 Pro дэлгэц',
+      'PAS мэдрэгч','Мушгаа + эрхий хуруу хааз','Torque Arm',
+      'Цахилгаан тоормос','Контроллерын уут','Батерейны уут','20"–29" обод'
+    ],
+    batteries:['72v20','72v30'],
+    images:['https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0074.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0075.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0076.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0077.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0078.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0079.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0080.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0081.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0082.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0083.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0084.jpg','https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0085.jpg']
+  }
+};
+
+const BATS = {
+  '36v20': { label:'36V · 20Аh', sub:'NMC цилиндр · Явах зай: 40–60 км', price:408000, img:'https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0086.jpg' },
+  '48v20': { label:'48V · 20Аh', sub:'NMC цилиндр · Явах зай: 40–60 км', price:493000, img:'https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0087.jpg' },
+  '48v25': { label:'48V · 25Аh', sub:'NMC цилиндр · Явах зай: 50–75 км', price:595000, img:'https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0088.jpg' },
+  '52v20': { label:'52V · 20Аh', sub:'NMC цилиндр · Явах зай: 40–65 км', price:612000, img:'https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0089.jpg' },
+  '72v20': { label:'72V · 20Аh', sub:'NMC цилиндр · Явах зай: 40–60 км', price:1479000, img:'https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0090.jpg' },
+  '72v30': { label:'72V · 30Аh', sub:'NMC цилиндр · Явах зай: 60–90 км', price:1785000, img:'https://raw.githubusercontent.com/clothingstorevera-spec/nuudel/main/images/image_0091.jpg' },
+};
+
+// ── STATE ─────────────────────────────────────────────────────
+let activeId=null, imgIdx=0, selBat=null;
+
+// ── FORMAT ────────────────────────────────────────────────────
+function fmt(n){ return '₮'+n.toLocaleString('mn-MN') }
+
+// ── OPEN KIT ──────────────────────────────────────────────────
+function openKit(id){
+  const k=KITS[id]; if(!k) return;
+  activeId=id; imgIdx=0; selBat=null;
+  const box=document.getElementById('mbox');
+  box.style.setProperty('--acc',k.color);
+  box.style.setProperty('--acc-gl',k.colorGl);
+  const wEl=document.getElementById('mwatts');
+  wEl.textContent=k.watts+' ИЖ БҮРДЭЛ'; wEl.style.color=k.color;
+  document.getElementById('mname').textContent=k.watts+' KIT';
+  document.getElementById('mspeed').textContent='Дээд хурд: '+k.speed;
+  document.getElementById('mprice').innerHTML=fmt(k.price)+' <small>иж бүрдэл ганцаараа</small>';
+  document.getElementById('mincludes').innerHTML=k.includes.map(t=>`<span class="inc-tag">${t}</span>`).join('');
+  buildGallery(k.images);
+  buildBats(k.batteries);
+  updateTotal(k,null);
+  const bg=document.getElementById('mbg');
+  bg.style.display='flex';
+  requestAnimationFrame(()=>bg.classList.add('open'));
+  document.body.style.overflow='hidden';
+}
+
+// ── GALLERY ───────────────────────────────────────────────────
+function buildGallery(imgs){
+  document.getElementById('mimg').src=imgs[0]||'';
+  document.getElementById('gdots').innerHTML=imgs.map((_,i)=>
+    `<div class="g-dot ${i===0?'on':''}" onclick="jumpImg(${i})"></div>`).join('');
+}
+function jumpImg(i){
+  const imgs=KITS[activeId].images;
+  i=((i%imgs.length)+imgs.length)%imgs.length; imgIdx=i;
+  const el=document.getElementById('mimg');
+  el.classList.add('fade');
+  setTimeout(()=>{el.src=imgs[i];el.classList.remove('fade');},220);
+  document.querySelectorAll('#gdots .g-dot').forEach((d,j)=>d.classList.toggle('on',j===i));
+}
+function galMove(d){jumpImg(imgIdx+d)}
+
+// ── BATTERIES ─────────────────────────────────────────────────
+function buildBats(ids){
+  document.getElementById('batlist').innerHTML=ids.map(id=>{
+    const b=BATS[id]; if(!b) return '';
+    return `<div class="bat-card" id="bc-${id}" onclick="pickBat('${id}')">
+      <div class="bat-img"><img src="${b.img}" alt="${b.label}" onerror="this.style.display='none'"></div>
+      <div>
+        <div class="bat-title">${b.label}</div>
+        <div class="bat-sub">${b.sub}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="bat-price">${fmt(b.price)}</div>
+        <div class="bat-check"><svg viewBox="0 0 9 7" fill="none"><path d="M1 3.5l2 2.5L8 1" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function pickBat(id){
+  selBat=(selBat===id)?null:id;
+  document.querySelectorAll('.bat-card').forEach(c=>c.classList.remove('sel'));
+  if(selBat) document.getElementById('bc-'+selBat)?.classList.add('sel');
+  updateTotal(KITS[activeId],selBat?BATS[selBat]:null);
+}
+
+// ── TOTAL ─────────────────────────────────────────────────────
+function updateTotal(kit,bat){
+  document.getElementById('totKit').textContent=fmt(kit.price);
+  if(bat){
+    document.getElementById('totBat').textContent=fmt(bat.price);
+    document.getElementById('totVal').textContent=fmt(kit.price+bat.price);
+  } else {
+    document.getElementById('totBat').textContent='Сонгоогүй';
+    document.getElementById('totVal').textContent=fmt(kit.price);
+  }
+}
+
+// ── CLOSE ─────────────────────────────────────────────────────
+function closeModal(){
+  const bg=document.getElementById('mbg');
+  bg.classList.remove('open'); bg.style.opacity='0';
+  setTimeout(()=>{bg.style.display='none';bg.style.opacity='';},310);
+  document.body.style.overflow=''; activeId=null; selBat=null;
+}
+function bgClose(e){if(e.target===document.getElementById('mbg'))closeModal();}
+
+// ── NAV ───────────────────────────────────────────────────────
+function toggleNav(){document.getElementById('navlinks').classList.toggle('open')}
+function closeNav(){document.getElementById('navlinks').classList.remove('open')}
+function scrollSec(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'})}
+window.addEventListener('scroll',()=>{
+  document.getElementById('mainnav').style.background=scrollY>60?'rgba(5,5,5,.98)':'rgba(5,5,5,.88)';
+});
+
+// ── KEYBOARD ──────────────────────────────────────────────────
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')closeModal();
+  if(activeId&&e.key==='ArrowLeft')galMove(-1);
+  if(activeId&&e.key==='ArrowRight')galMove(1);
+});
+
+// ── REVEAL ────────────────────────────────────────────────────
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach((en,i)=>{
+    if(en.isIntersecting){setTimeout(()=>en.target.classList.add('vis'),i*80);io.unobserve(en.target);}
+  });
+},{threshold:.1});
+document.querySelectorAll('.reveal,.stagger').forEach(el=>io.observe(el));
+
+
+
+
+// ── IMAGE LIGHTBOX ────────────────────────────────────────────
+function openLb(src){
+  const lb=document.getElementById('imgLightbox');
+  document.getElementById('imgLbImg').src=src;
+  lb.style.display='flex';
+  requestAnimationFrame(()=>lb.classList.add('open'));
+  document.body.style.overflow='hidden';
+}
+function closeLb(){
+  const lb=document.getElementById('imgLightbox');
+  lb.classList.remove('open');
+  setTimeout(()=>{lb.style.display='none';document.body.style.overflow='';},300);
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb();});
+// Add click-to-enlarge on all kit-bg images
+document.querySelectorAll('.kit-bg').forEach(img=>{
+  img.addEventListener('click',function(e){e.stopPropagation();if(this.src)openLb(this.src);});
+});
+
+</script>
+
+
+
+
+<!-- IMAGE LIGHTBOX -->
+<div id="imgLightbox" onclick="if(event.target===this)closeLb()">
+  <button id="imgLbClose" onclick="closeLb()">✕</button>
+  <img id="imgLbImg" src="" alt="">
+</div>
+
+</body>
+</html>
